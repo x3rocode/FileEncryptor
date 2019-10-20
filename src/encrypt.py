@@ -1,17 +1,11 @@
 #뭔가추가
 from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
 import pickle
-import struct, hashlib, binascii
 import os
 from tkinter import *
-from  tkinter import ttk
 import tkinter.messagebox
 from tkinter import filedialog
 from Crypto.Hash import SHA256 as SHA
-from functools import partial
-
-#key = bytearray(b'1234512345123451')
 filename = ''
 
 
@@ -143,9 +137,6 @@ def makeWindow():
 
 def serializeClassAndSave(data, savepath):
     v = savepath + data.filename + '.encrypt'
-    #print("136암호화된바이트 : ")
-    #print(data.filebyte)
-    #print("암호화된애 저장경로 : " + v)
     with open(v, 'wb') as f:
         return pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
@@ -153,8 +144,6 @@ def serializeClassAndSave(data, savepath):
 def deserlaizeClassByFile(path):
     ff = open(path, "rb")
     v = pickle.load(ff)
-    #print("v 144: ")
-    #print(v.filebyte)
     return v
 
 def saveFile(path, data):
@@ -179,9 +168,6 @@ def  encrypt(path, password):
 
     f = open(path, mode='rb')
     byteBuffer = bytearray(f.read())
-
-    #print("순수파일바이트 : ")
-    #print(byteBuffer)
     fname, ext = os.path.splitext(path)
 
 
@@ -207,7 +193,6 @@ def  encrypt(path, password):
     file1.nonce = e_cipher.nonce
     serializeClassAndSave(file1, savepath)
     return
-#불러와서, 복화한다..
 def decrypt(path, password):
     global e_cipher
 

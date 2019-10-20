@@ -20,7 +20,7 @@ class  filesystem():
     hashpw = bytearray()
     filename   = str()
     extension  = str()
-
+    nonce = str()
 
 
 
@@ -28,11 +28,8 @@ def makeWindow():
 
     def browserButtonOnClick():
         global filename
-
-        filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+        filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes=[("all files","*.*")])
         filename = filename.replace("/","\\")
-
-        #print("aa : " + filename)
         textbox.insert(0, filename)
 
     def relasePassword():
@@ -187,6 +184,8 @@ def  encrypt(path, password):
     #print(byteBuffer)
     fname, ext = os.path.splitext(path)
 
+
+
     fsplit  = fname.split('\\')
     fsplitLatest = fsplit.__len__()-1
     fname = fsplit[fsplitLatest]
@@ -198,7 +197,6 @@ def  encrypt(path, password):
     value = byteBuffer
 
     e_cipher = AES.new(key, AES.MODE_EAX)
-    print(type(e_cipher))
     ciphertext = e_cipher.encrypt(value)
 
     file1 = filesystem()
@@ -206,13 +204,9 @@ def  encrypt(path, password):
     file1.hashpw = key
     file1.filename = fname
     file1.extension = ext[1:]
-
+    file1.nonce = e_cipher.nonce
     serializeClassAndSave(file1, savepath)
-
-
     return
-
-
 #불러와서, 복화한다..
 def decrypt(path, password):
     global e_cipher
@@ -225,18 +219,8 @@ def decrypt(path, password):
     if(key != realkey):
         return 1
     else:
-        cipher = AES.new(key, AES.MODE_EAX, e_cipher.nonce)
-        data = cipher.decrypt(loadedFile.filebyte)
-
-
-        #print("암호화된파일바이트 : ")
-        #print(loadedFile.filebyte)
-        #print("보코화된파일바이트 : ")
-        #print(data)
+        e_cipher = AES.new(key, AES.MODE_EAX, loadedFile.nonce)
+        data = e_cipher.decrypt(loadedFile.filebyte)
         saveFile(filename.replace('encrypt', loadedFile.extension), data)
         return 0
-
-#encrypt("C:\\Users\\shlif\\PycharmProjects\\untitled\\target.png")
-#decrypt("C:\\Users\\shlif\\PycharmProjects\\untitled\\target.encrypt")
-
 makeWindow()

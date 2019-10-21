@@ -9,3 +9,4 @@ class foldersystem():
     files = []
     folders = []
     foldername = str()
+    hashpw = bytearray()

@@ -12,7 +12,9 @@ import dill
 from Structure import filesystem
 from Structure import foldersystem
 from pathlib import Path
+import shutil
 
+#친구야.
 
 def makeWindow():
 
@@ -48,7 +50,13 @@ def makeWindow():
 
         # action_with_arg = partial(encrypt, filename, password)
         def a():
-            new__decrypt(filename,passwordtextbox.get())
+            if(new__decrypt(filename,passwordtextbox.get()) == 0):
+                deleteFiles(filename)
+                tkinter.messagebox.showinfo("Info", "File is unlocked")
+            else:
+                tkinter.messagebox.showwarning("Warning", "Wrong Password")
+
+            relpwWindow.destroy()
 
             #if (decrypt(filename, passwordtextbox.get()) == 0):
                # deleteFiles(filename)
@@ -86,9 +94,8 @@ def makeWindow():
             result = new__encrypt(filename, None, None, passwordtextbox.get())
             new__serializeToFile(result, filename)
 
-
             #encrypt(filename, passwordtextbox.get())
-            #deleteFiles(filename)
+            deleteFiles(filename)
             tkinter.messagebox.showinfo("Info", "File is locked")
             passwordWindow.destroy()
 
@@ -108,7 +115,6 @@ def makeWindow():
         else:
             setPassword()
 
-
     def onclick_dnc():
         global filename
         if (filename == ""):
@@ -118,33 +124,33 @@ def makeWindow():
 
 
     window = Tk()
-    window.title("file encryption program")
-    window.geometry('500x150+600+200')
+    window.title("SquirrelSteak encryption program")
+    window.geometry('550x150+600+200')
 
     frame1 = Frame(window)
     frame1.pack(fill=X, pady = 20)
 
     labelPath = Label(frame1, text="PATH", width=10)
-    labelPath.pack(side=LEFT, padx=10, pady=10)
+    labelPath.pack(side=LEFT, padx=5, pady=5)
 
     path = ""
-    textbox = Entry(frame1, width = 20, textvariable = path)
-    textbox.pack(side = LEFT, padx=10, expand=True)
+    textbox = Entry(frame1, width = 35, textvariable = path)
+    textbox.pack(side = LEFT, padx=5)
 
-    browserbtn = Button(frame1, text="file", width=10, command = browserButtonOnClick)
+    browserbtn = Button(frame1, text="파일 열기", width=10, command = browserButtonOnClick)
     browserbtn.pack(side=RIGHT, padx=10, pady=10)
 
-    browserbtn2 = Button(frame1, text="folder", width=10, command = browserButtonOnClick2)
-    browserbtn2.pack(side=RIGHT, padx=20, pady=10)
+    browserbtn2 = Button(frame1, text="폴더 열기", width=10, command = browserButtonOnClick2)
+    browserbtn2.pack(side=RIGHT, padx=10, pady=10)
 
     frame2 = Frame(window)
     frame2.pack(fill=X, )
 
-    encrybtn = Button(frame2, text="encryption", width=20, command = onclick_enc)
-    encrybtn.pack(side = LEFT, padx=50, pady=10)
+    encrybtn = Button(frame2, text="암호화", width=20, command = onclick_enc)
+    encrybtn.pack(side = LEFT, padx=80, pady=10)
 
-    decrybtn = Button(frame2, text="decryption", width=20, command = onclick_dnc)
-    decrybtn.pack(side=LEFT, padx=50, pady=10)
+    decrybtn = Button(frame2, text="복호화", width=20, command = onclick_dnc)
+    decrybtn.pack(side=LEFT, padx=20, pady=10)
 
     window.mainloop()
 
@@ -177,7 +183,10 @@ def __Encrypt(bytes, password):
     ec = cipher.encrypt(bytes)
     return ec,cipher.nonce
 def deleteFiles(path):
-    os.remove(path)
+    try:
+        os.remove(path)
+    except :
+        shutil.rmtree(path)
 
 # 암호화를해서, 저장한다..
 def  encrypt(path, password):
@@ -279,18 +288,31 @@ def new__decrypt(path, password):
     print(currentPath)
     v = new__deserializeToFile (path)
 
+    key = changeHashKey(password)
+
     #얘가  '싱글파일' 일대 해제
     if (v.foldername == '?') :
         a,b = os.path.split(path)
         f = open(a + "/" +v.files[0].filename, "wb")
-        cipher = AES.new(changeHashKey(password), AES.MODE_EAX, v.files[0].nonce)
-        bytearray = cipher.decrypt(v.files[0].filebyte)
-        f.write(bytearray)
+        if(key == v.files[0].hashpw):
+            cipher = AES.new(changeHashKey(password), AES.MODE_EAX, v.files[0].nonce)
+            bytearray = cipher.decrypt(v.files[0].filebyte)
+            f.write(bytearray)
+            return 0
+        else:
+            return 1
+
         return
     else :
     #얘는 폴더대상으로  해제
-        recur(path, v, None, password)
+        if(key == v.hashpw):
+            recur(path, v, None, password)
+            return 0
+        else:
+            return 1
     return
+
+
 def new__encrypt(path, root = foldersystem(), target = foldersystem(), password = str()):
     if(root is None):
         root = foldersystem()
@@ -316,6 +338,7 @@ def new__encrypt(path, root = foldersystem(), target = foldersystem(), password 
         root.foldername = "?"
         root.files = []
         root.files.append(filesys)
+        root.hashpw = changeHashKey(password)
         return root
     else:
 
@@ -326,6 +349,7 @@ def new__encrypt(path, root = foldersystem(), target = foldersystem(), password 
         ct.files = filist
         ct.folders = fdlist
         ct.foldername = fname.split("/")[-1]
+        ct.hashpw = changeHashKey(password)
 
 
         datas = os.listdir(path)

@@ -1,20 +1,19 @@
 #뭔가추가
+
+
+
 from Crypto.Cipher import AES
 import pickle
 import os
 from tkinter import *
 import tkinter.messagebox
 from tkinter import filedialog
-from tkinter import dialog
 from Crypto.Hash import SHA256 as SHA
-filename = ''
-import dill
-from Structure import filesystem
-from Structure import foldersystem
+from src.Structure import filesystem
+from src.Structure import foldersystem
 from pathlib import Path
 import shutil
-
-#친구야.
+filename = ''
 
 def makeWindow():
 
@@ -147,22 +146,13 @@ def makeWindow():
     decrybtn.pack(side=LEFT, padx=20, pady=10)
 
     window.mainloop()
-
 def serializeClassAndSave(data, savepath):
     v = savepath + data.filename + '.encrypt'
     with open(v, 'wb') as f:
         return pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
-
-
-def deserlaizeClassByFile(path):
-    ff = open(path, "rb")
-    v = pickle.load(ff)
-    return v
-
 def saveFile(path, data):
     v = open(path, 'wb')
     v.write(data)
-
 def changeHashKey(password):
     hash = SHA.new()
     hash.update(password.encode('utf-8'))
@@ -170,7 +160,6 @@ def changeHashKey(password):
     key = hash.digest()
 
     return key
-
 def __Encrypt(bytes, password):
     key = changeHashKey(password)
     cipher = AES.new(key,  AES.MODE_EAX)
@@ -181,63 +170,9 @@ def deleteFiles(path):
         os.remove(path)
     except :
         shutil.rmtree(path)
-
-# 암호화를해서, 저장한다..
-def  encrypt(path, password):
-    global e_cipher
-    key = changeHashKey(password)
-
-    f = open(path, mode='rb')
-    byteBuffer = bytearray(f.read())
-    fname, ext = os.path.splitext(path)
-
-
-
-    fsplit  = fname.split('/')
-    fsplitLatest = fsplit.__len__()-1
-    fname = fsplit[fsplitLatest]
-
-    savepath = ""
-    for x in range(0, fsplit.__len__()-1):
-        savepath += fsplit[x]+"/"
-
-    value = byteBuffer
-
-    e_cipher = AES.new(key, AES.MODE_EAX)
-    ciphertext = e_cipher.encrypt(value)
-
-    file1 = filesystem()
-    file1.filebyte = ciphertext
-    file1.hashpw = key
-    file1.filename = fname
-    file1.extension = ext[1:]
-    file1.nonce = e_cipher.nonce
-    serializeClassAndSave(file1, savepath)
-    return
-def decrypt(path, password):
-    global e_cipher
-
-    key = changeHashKey(password)
-    loadedFile = deserlaizeClassByFile(path)
-
-    realkey  = loadedFile.hashpw
-
-    if(key != realkey):
-        return 1
-    else:
-        e_cipher = AES.new(key, AES.MODE_EAX, loadedFile.nonce)
-        data = e_cipher.decrypt(loadedFile.filebyte)
-        saveFile(filename.replace('encrypt', loadedFile.extension), data)
-        return 0
-
-
-
-i = 0
-
 #폴더압축해제할떄
 def recur(path, root = foldersystem(), target= foldersystem(), password = str()):
-    global i
-    i += 1
+
     ct = None
     currentPath =''
     file = ''
@@ -277,6 +212,7 @@ def recur(path, root = foldersystem(), target= foldersystem(), password = str())
 
     return
 
+##New Logics
 def new__decrypt(path, password):
     currentPath , file = os.path.split(path)
     print(currentPath)
@@ -305,8 +241,6 @@ def new__decrypt(path, password):
         else:
             return 1
     return
-
-
 def new__encrypt(path, root = foldersystem(), target = foldersystem(), password = str()):
     if(root is None):
         root = foldersystem()
@@ -365,8 +299,6 @@ def new__encrypt(path, root = foldersystem(), target = foldersystem(), password 
                 filist.append(fstem)
 
     return root
-
-
 def new__serializeToFile(data, path):
     dir = os.path.isdir(path)
 
@@ -383,7 +315,6 @@ def new__serializeToFile(data, path):
         v =  path.split('.')[0] + ".encrypt"
         with open(v, 'wb') as f:
             return pickle.dump(data, f)
-
 def new__deserializeToFile(path):
     dir = os.path.isdir(path)
     if (dir):
@@ -392,9 +323,4 @@ def new__deserializeToFile(path):
         v = path.split('.')[0] + ".encrypt"
         with open(v, 'rb') as f:
             return pickle.load(f)
-#result = new__encrypt("C:/Users/shlif/Documents/UnityProjectFolder/Utility/Assets/FolderSearch/SearchTest/FolderA/adsadas.txt", None, None,"1234")
-#new__serializeToFile(result, "C:/Users/shlif/Documents/UnityProjectFolder/Utility/Assets/FolderSearch/SearchTest/FolderA/adsadas.txt")
-#new__decrypt("C:/Users/shlif/Documents/UnityProjectFolder/Utility/Assets/FolderSearch/SearchTest/FolderA/adsadas.encrypt", "1234")
-
-
 makeWindow()

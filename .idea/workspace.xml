@@ -34,8 +34,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\shlif\Documents\GitHub\FileEncryptor" />
       <recent name="C:\Users\shlif\Documents\GitHub\FileEncryptor\src" />
+      <recent name="C:\Users\shlif\Documents\GitHub\FileEncryptor" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -63,7 +63,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\shlif\Documents\GitHub\FileEncryptor\encrypt.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -106,6 +106,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/encrypt.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

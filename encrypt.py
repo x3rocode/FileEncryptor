@@ -58,12 +58,6 @@ def makeWindow():
 
             relpwWindow.destroy()
 
-            #if (decrypt(filename, passwordtextbox.get()) == 0):
-               # deleteFiles(filename)
-               # tkinter.messagebox.showinfo("Info", "File is unlocked")
-           # elif (decrypt(filename, passwordtextbox.get()) == 1):
-             #   tkinter.messagebox.showwarning("Warning", "Wrong password")
-          #  relpwWindow.destroy()
 
         unlockbtn = Button(relpwframe2, text="UNLOCK", width=10, command=a)
         unlockbtn.pack(padx=10, pady=10)

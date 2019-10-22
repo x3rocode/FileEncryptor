@@ -117,6 +117,7 @@ def makeWindow():
 
 
     window = Tk()
+    window.iconbitmap(r'icon.ico')
     window.title("SquirrelSteak encryption program")
     window.geometry('550x150+600+200')
 

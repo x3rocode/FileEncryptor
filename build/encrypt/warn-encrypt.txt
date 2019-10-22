@@ -28,7 +28,7 @@ missing module named 'java.lang' - imported by platform (delayed, optional), C:\
 missing module named vms_lib - imported by platform (delayed, conditional, optional), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level)
 missing module named termios - imported by tty (top-level), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level), getpass (optional)
 missing module named grp - imported by shutil (optional), tarfile (optional), pathlib (delayed), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level)
-missing module named 'org.python' - imported by copy (optional), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level), xml.sax (delayed, conditional)
 missing module named pwd - imported by posixpath (delayed, conditional), shutil (optional), tarfile (optional), http.server (delayed, optional), webbrowser (delayed), pathlib (delayed, conditional, optional), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level), netrc (delayed, conditional), getpass (delayed)
+missing module named 'org.python' - imported by copy (optional), C:\Users\shlif\Documents\GitHub\FileEncryptor\src\encrypt.py (top-level), xml.sax (delayed, conditional)
 missing module named cffi - imported by Crypto.Util._raw_api (optional)
 missing module named StringIO - imported by Crypto.Util.py3compat (conditional)

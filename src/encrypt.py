@@ -117,9 +117,15 @@ def makeWindow():
 
 
     window = Tk()
-    window.iconbitmap(r'icon.ico')
+    try:
+        window.iconbitmap(r'icon.ico')
+    except:
+        a = 0
+
+
+
     window.title("SquirrelSteak encryption program")
-    window.geometry('550x150+600+200')
+    window.geometry('600x150+600+200')
 
     frame1 = Frame(window)
     frame1.pack(fill=X, pady = 20)
